@@ -32,7 +32,7 @@ class Youtubesubscribe_Widget extends WP_Widget {
 		}
 		
 		/**widget content - the actual output of widget */
-		echo '<div class="g-ytsubscribe" data-channel="'.$instance['channel'].'" data-layout="'.$instance['layout'].'" data-theme="'.$instance['theme'].'" data-count="default"></div>';// we can use data-channel inst of data-channelid
+		echo '<div class="g-ytsubscribe" data-channel="'.$instance['channel'].'" data-layout="'.$instance['layout'].'" data-theme="'.$instance['theme'].'" data-count="'.$instance['count'].'"></div>';// we can use data-channel inst of data-channelid
 		
 		echo $args['after_widget']; // you can use anything to display after widget ex. </div>
 	}
@@ -56,8 +56,11 @@ class Youtubesubscribe_Widget extends WP_Widget {
 		/**layout name to be shown (default/full)*/
 		$layout = ! empty( $instance['layout'] ) ? $instance['layout'] : esc_html__( 'default', 'youtube_domain' );
 		
-		/**theme name to be shown (default/full)*/
+		/**theme name to be shown (default/dark)*/
 		$theme = ! empty( $instance['theme'] ) ? $instance['theme'] : esc_html__( 'default', 'youtube_domain' );
+		
+		/**subscription count to shown or make it hidden*/
+		$count = ! empty( $instance['count'] ) ? $instance['count'] : esc_html__( 'default', 'youtube_domain' );
 		
 		?>
 
@@ -107,6 +110,19 @@ class Youtubesubscribe_Widget extends WP_Widget {
 			</select>
 		</p>
 
+		<!-- html for subscription count of subscribe button-->
+		<p>
+			<label for="<?php echo esc_attr( $this->get_field_id( 'count' ) ); ?>"><?php esc_attr_e( 'Subscribe Count:', 'youtube_domain' ); ?></label> 
+			<select 
+			class="widefat" 
+			id="<?php echo esc_attr( $this->get_field_id( 'count' ) ); ?>" 
+			name="<?php echo esc_attr( $this->get_field_name( 'count' ) ); ?>" >
+			<option value="default" <?php echo ($count=='default') ? 'selected' : '' ?>>Default</option>
+			<option value="hidden" <?php echo ($count=='hidden') ? 'selected' : '' ?>>Hidden</option>
+			
+			</select>
+		</p>
+
 		
 		<?php 
 	}
@@ -134,6 +150,9 @@ class Youtubesubscribe_Widget extends WP_Widget {
 
 		/** theme to be changed when changed in widget area backend */
 		$instance['theme'] = ( ! empty( $new_instance['theme'] ) ) ? sanitize_text_field( $new_instance['theme'] ) : '';
+		
+		/** Subscription count to be changed when changed in widget area backend */
+		$instance['count'] = ( ! empty( $new_instance['count'] ) ) ? sanitize_text_field( $new_instance['count'] ) : '';
 
 		return $instance;
 	}
